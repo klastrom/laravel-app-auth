@@ -77,3 +77,32 @@ docker compose up -d
 ``` 
 
 .env.exampleをコピーして.envを作成
+
+サーバーでfetchとpullとを実行
+#!/bin/bash
+
+# 使用するGitリポジトリのパスを設定
+REPO_PATH="/path/to/your/git/repository"
+
+# リポジトリのディレクトリへ移動
+cd "$REPO_PATH" || { echo "指定したディレクトリに移動できません: $REPO_PATH"; exit 1; }
+
+# 現在のディレクトリを表示 (デバッグ用)
+echo "現在のディレクトリ: $(pwd)"
+
+# fetchでリモートの最新情報を取得
+echo "Fetching latest changes from remote..."
+git fetch origin || { echo "git fetchに失敗しました"; exit 1; }
+
+# 現在のブランチ名を取得
+CURRENT_BRANCH=$(git branch --show-current)
+
+# pullでリモートリポジトリと同期
+echo "Pulling changes into the current branch: $CURRENT_BRANCH"
+git pull origin "$CURRENT_BRANCH" || { echo "git pullに失敗しました"; exit 1; }
+
+# 処理完了メッセージ
+echo "Git fetchとpullが完了しました！"
+
+nano update-repo.sh
+chmod +x update-repo.sh
